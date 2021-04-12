@@ -12,4 +12,9 @@ instead of "git push":
     done
 
 However, if you attempt to push multiple commits at once, you need
-something more elaborate.
+something more elaborate.  And if you have more than 4 commits in the
+repository, and don't want to wait a very long time, you also need
+something more elaborate.  This is left as an exercise for the reader.
+
+See githooks(1) for information on how to install this as a
+pre-receive hook.
