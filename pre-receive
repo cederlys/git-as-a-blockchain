@@ -22,14 +22,17 @@ do
 	zeroes="0$zeroes"
 	nibbles=`expr $nibbles - 1`
     done
-    case $new in
-	*$zeroes)
-	    echo "$ref: $new ends in $zeroes; good"
-	    ;;
-	*)
-	    echo $ref: the new commit ID must end in $zeroes, not $new >&2
-	    exitval=1
-	    ;;
-    esac
+    for commit in `git rev-list $old..$new`
+    do
+	case $commit in
+	    *$zeroes)
+		echo "$ref: $commit ends in $zeroes; good"
+		;;
+	    *)
+		echo $ref: $commit does not end in $zeroes >&2
+		exitval=1
+		;;
+	esac
+    done
 done
 exit $exitval
