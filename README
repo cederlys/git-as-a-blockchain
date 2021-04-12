@@ -1,0 +1,15 @@
+Git is basically a blockchain.  The only thing that is missing is the
+proof-of-work bit.  We can easily add that to git using a pre-receive
+hook.  This repository contains a sample pre-receive hook.
+
+Unless you are really lucky, you might want to run something like this
+instead of "git push":
+
+    until git push origin main
+    do
+        sleep 1
+	git commit --amend --reset-author --no-edit
+    done
+
+However, if you attempt to push multiple commits at once, you need
+something more elaborate.
