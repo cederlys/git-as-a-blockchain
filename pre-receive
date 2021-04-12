@@ -1,0 +1,35 @@
+#!/bin/sh
+
+exitval=0
+while read old new ref
+do
+    if [ $new = 0000000000000000000000000000000000000000 ]
+    then
+	echo pre-receive: not evaluating branch removal
+	continue
+    fi
+    count=`git rev-list $new|wc -l`
+    bits=0
+    while [ $count -gt 0 ]
+    do
+	bits=`expr $bits + 1`
+	count=`expr $count / 2`
+    done
+    nibbles=`expr $bits / 4 + 1`
+    zeroes=
+    while [ $nibbles -gt 0 ]
+    do
+	zeroes="0$zeroes"
+	nibbles=`expr $nibbles - 1`
+    done
+    case $new in
+	*$zeroes)
+	    echo "$ref: $new ends in $zeroes; good"
+	    ;;
+	*)
+	    echo $ref: the new commit ID must end in $zeroes, not $new >&2
+	    exitval=1
+	    ;;
+    esac
+done
+exit $exitval
